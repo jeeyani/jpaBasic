@@ -120,6 +120,7 @@ public class JpaMain {
             /*======================*/
             /*        준영속         */
             /*======================*/
+            /*
             //영속상태
             Member member =  em.find(Member.class,150L);
             member.setName("AZAZAZ");
@@ -132,7 +133,32 @@ public class JpaMain {
             Member member2 =  em.find(Member.class,150L);
 
             //커밋이후에 쿼리가 나감(이때 디비에 저장됨)
+            */
+
+            /*======================*/
+            /*   필드와 컬럼 매핑      */
+            /*======================*/
+            /*
+            Member member = new Member();
+            member.setId(3L);
+            member.setUsername("C");
+            member.setRoleType(RoleType.GUEST);
+
+            em.persist(member);
+            */
+
+            /*======================*/
+            /*    기본 키 매핑        */
+            /*======================*/
+
+            MemberID member = new MemberID();
+            //member.setId("ID_A");
+            member.setUsername("C");
+
+            em.persist(member);
+
             et.commit();
+
         } catch (Exception e){
             et.rollback();
         } finally {
