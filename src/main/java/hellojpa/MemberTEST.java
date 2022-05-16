@@ -3,15 +3,14 @@ package hellojpa;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Entity //(name="Member") //jpa가 내부적으로 구분하는 값
+//@Entity //(name="Member") //jpa가 내부적으로 구분하는 값
 //@Table (name="MBR") //"MBR"이라는 이름의 테이블과 매핑
-public class Member {
+public class MemberTEST {
 
     /*
     @Id
@@ -51,7 +50,7 @@ public class Member {
     @Transient
     private int temp;
 
-    public Member(){
+    public MemberTEST(){
 
     }
 

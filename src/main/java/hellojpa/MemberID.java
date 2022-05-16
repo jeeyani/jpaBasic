@@ -5,15 +5,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Entity
+//@Entity
 /*@TableGenerator(
         name = "MEMBER_SEQ_GENERATOR",
         table = "MY_SEQUENCES", //테이블 이름
         pkColumnValue = "MEMBER_SEQ", allocationSize = 1)*/
-@SequenceGenerator(
+/*@SequenceGenerator(
         name = "MEMBER_SEQ_GENERATOR",
         sequenceName = "MEMBER_SEQ", //매핑할 데이터베이스 시퀀스 이름
         initialValue = 1, allocationSize = 1) //allocationSize = 50, 시퀀스 한 번 호출에 증가하는 수
+*/
 public class MemberID {
 
     @Id
