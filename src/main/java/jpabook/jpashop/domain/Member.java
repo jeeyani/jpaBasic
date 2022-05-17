@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.security.PrivateKey;
 
-@Entity
+//@Entity
 public class Member {
 
     @Id
