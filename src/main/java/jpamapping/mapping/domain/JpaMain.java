@@ -54,11 +54,12 @@ public class JpaMain {
 
             Member member = new Member();
             member.setName("member1");
-            member.setTeam(team); //실제 데이터가 들어가는 실제 매핑
+           // member.setTeam(team); //실제 데이터가 들어가는 실제 매핑
 
             em.persist(member);
 
             //team.getMembers().add(member); //알아서 값을 넣어주지만 명시용? -> setTeam() 메소드 안에 미리 설정해 두기
+            team.addMember(member); //*연관관계 편의 메소드 사용
 
             em.flush();
             em.clear();
@@ -67,9 +68,16 @@ public class JpaMain {
             Team findTeam = em.find(Team.class, team.getId());
             List<Member> members = findTeam.getMembers();
 
+            /*
             for(Member m : members){
                 System.out.println("m = " + m.getName());
             }
+            */
+
+            //**무한루프 주의!!
+            System.out.println("==========================");
+            System.out.println("members = "+findTeam);
+            System.out.println("==========================");
 
             et.commit();
 

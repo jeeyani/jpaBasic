@@ -19,6 +19,11 @@ public class Team {
     //해당 객체에 값을 넣어도 db에 반영되지 않음
     private List<Member> members = new ArrayList<>();
 
+    public void addMember(Member member){
+        member.setTeam(this);
+        members.add(member);
+    }
+
     public Long getId() {
         return id;
     }
@@ -41,5 +46,15 @@ public class Team {
 
     public void setMembers(List<Member> members) {
         this.members = members;
+    }
+
+    //무한루프 주의
+    @Override
+    public String toString(){
+        return "Team{"+
+                "id="+ id +
+                ", name='"+ name + '\'' +
+                ", members=" + members +
+                '}';
     }
 }
