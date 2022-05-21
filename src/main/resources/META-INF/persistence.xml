@@ -10,7 +10,7 @@
             <property name="javax.persistence.jdbc.password" value=""/>
             <!--<property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test"/>-->
             <!--<property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/jpashop"/>-->
-            <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/mapping"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/mappings"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 
             <!-- 옵션 -->
