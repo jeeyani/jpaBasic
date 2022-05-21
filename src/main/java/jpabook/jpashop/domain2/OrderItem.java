@@ -2,7 +2,7 @@ package jpabook.jpashop.domain2;
 
 import javax.persistence.*;
 
-@Entity
+//@Entity
 public class OrderItem {
 
     @Id
