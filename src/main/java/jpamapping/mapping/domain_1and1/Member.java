@@ -2,7 +2,7 @@ package jpamapping.mapping.domain_1and1;
 
 import javax.persistence.*;
 
-@Entity
+//@Entity
 public class Member {
 
     @Id

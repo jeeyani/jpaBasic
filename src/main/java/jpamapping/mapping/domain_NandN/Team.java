@@ -1,4 +1,4 @@
-package jpamapping.mapping.domain_1and1;
+package jpamapping.mapping.domain_NandN;
 
 import javax.persistence.*;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package jpamapping.mapping.domain_1and1;
+package jpamapping.mapping.domain_NandN;
 
 import javax.persistence.*;
 
@@ -9,11 +9,6 @@ public class Locker {
     private Long id;
 
     private String name;
-
-    // mappedBy 원리 그래도 적용, 읽기 전용으로 사용된다.
-    @OneToOne(mappedBy =  "locker")
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
 
     public Long getId() {
         return id;
@@ -31,11 +26,4 @@ public class Locker {
         this.name = name;
     }
 
-    public Locker getLocker() {
-        return locker;
-    }
-
-    public void setLocker(Locker locker) {
-        this.locker = locker;
-    }
 }
