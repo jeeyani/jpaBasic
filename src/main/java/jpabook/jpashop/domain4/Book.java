@@ -1,9 +1,10 @@
-package jpamapping.mapping.highLevel.strategy;
+package jpabook.jpashop.domain4;
+
 
 import javax.persistence.Entity;
 
 //@Entity
-public class Book extends Item{
+public class Book extends Item {
 
     private String author;
     private String isbn;

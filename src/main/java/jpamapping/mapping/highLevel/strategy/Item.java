@@ -2,7 +2,7 @@ package jpamapping.mapping.highLevel.strategy;
 
 import javax.persistence.*;
 
-@Entity
+//@Entity
 //@Inheritance(strategy = InheritanceType.JOINED) //조인전략
 //@Inheritance(strategy = InheritanceType.SINGLE_TABLE) //단일 테이블 전략
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) //구현 클래스마다의 테이블 전략
