@@ -1,15 +1,16 @@
-package jpabook.proxy.proxy;
+package jpabook.jpashop.domain5;
 
-import jpabook.jpashop.domain4.BaseEntity;
-import jpabook.jpashop.domain4.Order;
-import org.hibernate.engine.profile.Fetch;
+import jpabook.jpashop.domain5.Order;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
 //@Entity
-public class Member{
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -20,10 +21,12 @@ public class Member{
     private String street;
     private String zipcode;
 
-    @ManyToOne(fetch = FetchType.LAZY) //지연로딩
-    //@ManyToOne(fetch = FetchType.EAGER) //즉시로딩
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
+    //실전예제2 추가
+    //** 예제용 코드일 뿐, 비지니스적으로 너무 비효율적인 코드
+    //멤버에서 주문내역을 조회한다는 것이 비효율적임
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
+
 
     public Long getId() {
         return id;
@@ -65,11 +68,11 @@ public class Member{
         this.zipcode = zipcode;
     }
 
-    public Team getTeam() {
-        return team;
+    public List<Order> getOrders() {
+        return orders;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

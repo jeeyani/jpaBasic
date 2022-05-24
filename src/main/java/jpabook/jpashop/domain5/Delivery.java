@@ -1,29 +1,27 @@
-package jpabook.proxy.proxy;
+package jpabook.jpashop.domain5;
 
-import jpabook.jpashop.domain4.BaseEntity;
-import jpabook.jpashop.domain4.Order;
-import org.hibernate.engine.profile.Fetch;
+import jpabook.jpashop.domain5.BaseEntity;
+import jpabook.jpashop.domain5.DeliveryStatus;
+import jpabook.jpashop.domain5.Order;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 //@Entity
-public class Member{
-
+public class Delivery extends BaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "MEMBER_ID")
+    @Column(name = "DELIVERY_ID")
     private Long id;
-    private String name;
+
+    @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY) //지연로딩
+    private Order order;
+
     private String city;
     private String street;
     private String zipcode;
 
-    @ManyToOne(fetch = FetchType.LAZY) //지연로딩
-    //@ManyToOne(fetch = FetchType.EAGER) //즉시로딩
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
+    @Enumerated(EnumType.STRING)
+    private DeliveryStatus deliveryStatus;
 
     public Long getId() {
         return id;
@@ -33,12 +31,12 @@ public class Member{
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public String getCity() {
@@ -65,11 +63,11 @@ public class Member{
         this.zipcode = zipcode;
     }
 
-    public Team getTeam() {
-        return team;
+    public DeliveryStatus getDeliveryStatus() {
+        return deliveryStatus;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 }

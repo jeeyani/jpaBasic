@@ -19,6 +19,10 @@ public class JpaMain {
         et.begin();
 
         try {
+
+            /*프록시 기초*/
+
+            /*
             Member member = new Member();
             member.setName("지연");
 
@@ -27,11 +31,11 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            //Member findMember = em.find(Member.class,member.getId());
-            /*
+            Member findMember = em.find(Member.class,member.getId());
+
             System.out.println("findMember.getId() = " + findMember.getId());
             System.out.println("findMember.getName() = " + findMember.getName());
-             */
+
             Member findMember2 = em.getReference(Member.class, member.getId());
             System.out.println("findMember.getClass() = " + findMember2.getClass());
 
@@ -39,6 +43,32 @@ public class JpaMain {
 
             System.out.println("findMember.getId() = " + findMember2.getId());
             System.out.println("findMember.getName() = " + findMember2.getName()); //오류발생
+            */
+
+
+
+            /*즉시로딩 지연로딩*/
+            Team team = new Team();
+            team.setName("tA");
+            em.persist(team);
+
+
+            Member member1 = new Member();
+            member1.setName("m1");
+            em.persist(member1);
+
+            em.flush();
+            em.clear();
+
+            Member m = em.find(Member.class, member1.getId());
+            System.out.println("====================");
+
+            //org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl 오류...왜?
+            System.out.println("m = " + m.getTeam().getClass());
+            System.out.println("====================");
+
+
+
 
             et.commit();
 
