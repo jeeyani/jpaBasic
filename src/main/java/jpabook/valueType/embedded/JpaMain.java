@@ -1,13 +1,10 @@
-package jpabook.valueType;
+package jpabook.valueType.embedded;
 
-
-import jpabook.proxy.proxy.Team;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.concurrent.atomic.DoubleAdder;
 
 public class JpaMain {
 

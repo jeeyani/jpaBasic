@@ -1,4 +1,4 @@
-package jpabook.valueType;
+package jpabook.valueType.collection;
 
 import javax.persistence.Embeddable;
 

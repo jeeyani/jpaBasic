@@ -1,4 +1,4 @@
-package jpabook.valueType;
+package jpabook.valueType.embedded;
 
 import javax.persistence.Embeddable;
 import java.time.LocalDateTime;

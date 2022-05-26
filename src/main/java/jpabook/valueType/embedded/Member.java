@@ -1,11 +1,8 @@
-package jpabook.valueType;
-
-import jpabook.proxy.proxy.Team;
+package jpabook.valueType.embedded;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-@Entity
+//@Entity
 public class Member {
 
     @Id
