@@ -5,7 +5,7 @@ import org.w3c.dom.ls.LSInput;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+//@Entity
 public class Child {
 
     @Id
