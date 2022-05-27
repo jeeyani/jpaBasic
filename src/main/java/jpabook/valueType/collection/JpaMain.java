@@ -23,13 +23,18 @@ public class JpaMain {
             member.setUsername("wlduis");
             member.setHomeAddress(new Address("c","s","1000"));
 
-
+            //[치킨, 피자] 값 타입을 같이 구하고자 할때 컬렉션을 사용함
+            //그외에는 딱히 사용하지 않는 타입
             member.getFavoriteFoods().add("치킨");
             member.getFavoriteFoods().add("피자");
             member.getFavoriteFoods().add("스파게티티");
 
-            member.getAddressHistory().add(new Address("o1","ss","1010"));
-            member.getAddressHistory().add(new Address("o2","ss","1010"));
+           /* member.getAddressHistory().add(new Address("o1","ss","1010"));
+            member.getAddressHistory().add(new Address("o2","ss","1010"));*/
+
+            //엔티티로 저장하기
+            member.getAddressHistory().add(new AddressEntity("o1","ss","1010"));
+            member.getAddressHistory().add(new AddressEntity("o2","ss","1010"));
 
             em.persist(member);
 
@@ -75,9 +80,10 @@ public class JpaMain {
             //o1 주소를 바꾸기
             //equals를 이용하여 기존 데이터 지우고 새로 넣기
             //영속성 정의 설정 + 고아객체 설정이 적용됨
+            /*
             findMember.getAddressHistory().remove(new Address("o1","ss","1010")); //내꺼 이거 왜 안지워지냐
             findMember.getAddressHistory().add(new Address("newC1","ss","1010"));
-
+            */
 
             et.commit();
 
