@@ -1,4 +1,7 @@
-package jpabook.valueType.collection;
+package jpabook.jpql.jpql;
+
+import jpabook.valueType.collection.Address;
+import jpabook.valueType.collection.AddressEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,19 +28,6 @@ public class Member {
     @CollectionTable(name = "FAVORITE_FOOD" , joinColumns = @JoinColumn(name = "MEMBER_ID"))
     @Column(name = "FOOD_NAME") //String 타입으로 하나니깐 언급
     private Set<String> favoriteFoods = new HashSet<>();
-
-    //@OrderColumn(name = "address_history_order") //순서를 지정하는 방법도 있지만, 추천하는 방식은 아님
-
-    //값타입
-    /*@ElementCollection
-    @CollectionTable(name = "ADDRESS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
-    private List<Address> addressHistory = new ArrayList<>();
-    */
-
-    //엔티티 타입으로 정의하기
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "MEMBER_ID")
-    private List<AddressEntity> addressHistory = new ArrayList<>();
 
     //속성 재정의 하기
     @Embedded
@@ -80,14 +70,6 @@ public class Member {
         this.favoriteFoods = favoriteFoods;
     }
 
-/*    public List<Address> getAddressHistory() {
-        return addressHistory;
-    }
-
-    public void setAddressHistory(List<Address> addressHistory) {
-        this.addressHistory = addressHistory;
-    }*/
-
     public Address getWorkAddress() {
         return workAddress;
     }
@@ -96,11 +78,4 @@ public class Member {
         this.workAddress = workAddress;
     }
 
-    public List<AddressEntity> getAddressHistory() {
-        return addressHistory;
-    }
-
-    public void setAddressHistory(List<AddressEntity> addressHistory) {
-        this.addressHistory = addressHistory;
-    }
 }
