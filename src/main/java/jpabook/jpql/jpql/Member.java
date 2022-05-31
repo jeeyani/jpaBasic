@@ -9,34 +9,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-//@Entity
+@Entity
 public class Member {
 
     @Id
     @GeneratedValue
-    @Column(name = "MEMBER_ID")
     private Long id;
 
-    @Column(name = "USER_NAME")
     private String username;
 
-    @Embedded
-    private Address homeAddress;
+    private int age;
 
-    //컬렉션 타입
-    @ElementCollection
-    @CollectionTable(name = "FAVORITE_FOOD" , joinColumns = @JoinColumn(name = "MEMBER_ID"))
-    @Column(name = "FOOD_NAME") //String 타입으로 하나니깐 언급
-    private Set<String> favoriteFoods = new HashSet<>();
-
-    //속성 재정의 하기
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name="city", column = @Column(name = "WORK_CITY")),
-            @AttributeOverride(name = "street", column = @Column(name ="WORK_STREET")),
-            @AttributeOverride(name = "zipcode", column = @Column(name ="WORK_ZIPCODE"))
-    })
-    private Address workAddress;
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
     public Long getId() {
         return id;
@@ -54,28 +40,19 @@ public class Member {
         this.username = username;
     }
 
-    public Address getHomeAddress() {
-        return homeAddress;
+    public int getAge() {
+        return age;
     }
 
-    public void setHomeAddress(Address homeAddress) {
-        this.homeAddress = homeAddress;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public Set<String> getFavoriteFoods() {
-        return favoriteFoods;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setFavoriteFoods(Set<String> favoriteFoods) {
-        this.favoriteFoods = favoriteFoods;
+    public void setTeam(Team team) {
+        this.team = team;
     }
-
-    public Address getWorkAddress() {
-        return workAddress;
-    }
-
-    public void setWorkAddress(Address workAddress) {
-        this.workAddress = workAddress;
-    }
-
 }
