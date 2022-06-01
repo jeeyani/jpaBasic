@@ -1,5 +1,6 @@
 package jpabook.jpql.jpql;
 
+import hellojpa.MemberTEST;
 import jpabook.valueType.collection.Address;
 import jpabook.valueType.collection.AddressEntity;
 
@@ -20,9 +21,17 @@ public class Member {
 
     private int age;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) //LAZY로 설정해주기
     @JoinColumn(name = "TEAM_ID")
     private Team team;
+
+    @Enumerated(EnumType.STRING)
+    private MemberType type;
+
+    public void changeTeam(Team team){
+        this.team = team;
+        team.getMembers().add(this);
+    }
 
     public Long getId() {
         return id;
@@ -54,5 +63,13 @@ public class Member {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public MemberType getType() {
+        return type;
+    }
+
+    public void setType(MemberType type) {
+        this.type = type;
     }
 }

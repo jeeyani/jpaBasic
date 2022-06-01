@@ -2,6 +2,7 @@ package jpabook.jpql.jpql;
 
 
 import jpabook.valueType.collection.AddressEntity;
+import org.w3c.dom.ls.LSInput;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -59,6 +60,7 @@ public class JpaMain {
             //em.createNativeQuery("select MEMBER_ID, city, street, zipcode, USERNAME from member "). getResultList();
 
             /* JPQL */
+            /*
             Member member = new Member();
             member.setUsername("m1");
             member.setAge(10);
@@ -82,8 +84,12 @@ public class JpaMain {
             System.out.println("SingleResult = " + res.getUsername());
 
 
+             */
+
+            /*
 
             //===========프로젝션=================================================
+
 
             //엔티티 프로젝션
             em.createQuery("select m.team from Member m", Team.class)
@@ -121,7 +127,96 @@ public class JpaMain {
                 System.out.println("aa = " + aa);
             }
 
+            */
 
+            //============ 조인 ================================
+            Team team = new Team();
+            team.setName("T1");
+            em.persist(team);
+
+
+            Member member = new Member();
+            member.setUsername("m1");
+            member.setAge(10);
+            member.setType(MemberType.ADMIN);
+
+            member.setTeam(team);
+            em.persist(member);
+
+
+            em.flush();
+            em.clear();
+
+            //inner 조인
+            //String q = "select m from Member m inner join m.team t";
+
+            //left 조인
+            //String q = "select m from Member m left outer join m.team t";
+
+            //세타조인
+            /*String q = "select m from Member m, Team  t where m.username = t.name";
+            List<Member> result = em.createQuery(q, Member.class)
+                    .getResultList();*/
+
+
+            //================= 서브쿼리 =====================
+            // JPA는 where, having절에서만 서브 쿼리 사용이 가능하다
+            // 하이버네이트에서는 select절도 사용 가능
+
+            //select 절 쿼리
+            /*String q = "select (select avg(m1.age) FROM Member m1) as avgAge from Member m join Team  t on m.username = t.name";
+            List<Member> result = em.createQuery(q, Member.class)
+                    .getResultList();
+
+             */
+
+            //====== JPQL 타입 표현 ===================================
+
+            /*
+            String q = "select m.username, 'HELLO', TRUE From Member m where m.team = jpabook.jpql.jpql.MemberType.ADMIN";
+            List<Object[]> result =  em.createQuery(q)
+                    .getResultList();
+
+            for (Object[] o : result){
+                System.out.println("Object = " + o[0]);
+                System.out.println("Object = " + o[1]);
+                System.out.println("Object = " + o[2]);
+            }
+            */
+
+            //============= 조건식 - CASE =========================
+            /*
+            String q = "select " +
+                        "case when m.age <= 10 then '학생요금' " +
+                        "     when m.age >= 60 then '경로요금' " +
+                        "     else '일반요금'" +
+                        " end " +
+                    "from Member m";
+            List<String> res = em.createQuery(q, String.class).getResultList();
+            for (String s : res){
+                System.out.println("s = " + s);
+            }
+
+             */
+
+            //=========== JPQL 기본 함수 ==============================
+            //String q = "select 'a' || 'b' FROM Member m";
+
+            /*String q = "select locate('a','dfgfsda') FROM Member m";
+            List<Integer> res = em.createQuery(q, Integer.class).getResultList();
+            for (Integer s : res){
+                System.out.println("s = " + s);
+            }*/
+
+            //SIZE  ==> JPA 전용
+            //String q = "select size(t.members) FROM Team t";
+
+            //INDEX ==> JPA 전용
+            String q = "select index(t.members) FROM Team t";
+            List<String> res = em.createQuery(q, String.class).getResultList();
+            for (String s : res){
+                System.out.println("s = " + s);
+            }
 
             et.commit();
 
