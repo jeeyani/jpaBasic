@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class JpaMain {
@@ -130,6 +131,7 @@ public class JpaMain {
             */
 
             //============ 조인 ================================
+            /*
             Team team = new Team();
             team.setName("T1");
             em.persist(team);
@@ -146,6 +148,8 @@ public class JpaMain {
 
             em.flush();
             em.clear();
+
+             */
 
             //inner 조인
             //String q = "select m from Member m inner join m.team t";
@@ -212,11 +216,122 @@ public class JpaMain {
             //String q = "select size(t.members) FROM Team t";
 
             //INDEX ==> JPA 전용
+            /*
             String q = "select index(t.members) FROM Team t";
             List<String> res = em.createQuery(q, String.class).getResultList();
             for (String s : res){
                 System.out.println("s = " + s);
             }
+             */
+
+            // =========== 경로 표현식 특징 ==========================
+
+            //1.단일 값 연관경로 , 묵시적 내부 조인이 발생한다.
+            //Team과 Member 테이블이 조인됨
+            //실제 운영시에 주의 해야함 ==> "명시적 조인"을 사용하쟈!!
+            //String q = "select m.team.name FROM Member m";
+
+
+            //2. 컬렉션 값 연관 경로
+            //묵시적 내부 조인 발생, 탐색하지 않음
+            /*
+            String q = "select t.members FROM Team t";
+
+            Collection resQ = em.createQuery(q, Collection.class).getResultList();
+            for (Object s : resQ){
+                System.out.println("s = " + s);
+            }
+
+            //from절에서 명시적 조인을 통해 별칭을 얻으면, 그 별칭을 통해 탐색이 가능
+            String q2 = "select m From Team t join t.members m";
+            List<String> res = em.createQuery(q2, String.class).getResultList();
+            for (String s : res){
+                System.out.println("s = " + s);
+            }
+
+             */
+
+
+            //=========== 페치 조인 ========================================
+
+            Team teamA = new Team();
+            teamA.setName("팀A");
+            em.persist(teamA);
+
+            Team teamB = new Team();
+            teamB.setName("팀B");
+            em.persist(teamB);
+
+
+            Member member1 = new Member();
+            member1.setUsername("회원1");
+            member1.setTeam(teamA);
+            em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("회원2");
+            member2.setTeam(teamA);
+            em.persist(member2);
+
+            Member member3 = new Member();
+            member3.setUsername("회원3");
+            member3.setTeam(teamB);
+            em.persist(member3);
+
+            em.flush();
+            em.clear();
+
+            /*
+            String q = "select m from Member m";
+            List<Member> result = em.createQuery(q, Member.class).getResultList();
+
+            for(Member m : result) {
+                System.out.println("m = " + m.getUsername() +" " +m.getTeam().getName());
+                //1. 회원1, 팀A (sql)
+                //2. 회원2, 팀A(1차 캐시)
+                //3. 회원3, 팀B (sql)
+
+                //즉, 이러한 경우는 N개를 조회할때 총 쿼리를 N+1 번 실행하게 되는 것이다!!
+            }
+
+            //* 페치 조인 적용
+            //조인을 이용해서 한방쿼리를 작성~!!
+            String q2 = "select m from Member m join fetch m.team";
+            List<Member> result2 = em.createQuery(q2, Member.class).getResultList();
+
+            for(Member m : result2) {
+                System.out.println("m = " + m.getUsername() +" " +m.getTeam().getName());
+            }
+            */
+
+
+            //컬렉션 페치 조인
+            String q2 = "select t from Team t join fetch t.members";
+            List<Team> result2 = em.createQuery(q2, Team.class).getResultList();
+
+            for(Team t : result2) {
+                System.out.println("t = "+t.getName() +" || m ="+t.getMembers().size());
+                /*
+                * t = 팀A || m =2
+                * t = 팀A || m =2  ==> 중복 출력!!
+                * t = 팀B || m =1
+                * */
+            }
+
+            //distinct로 증복 없애기 (1 : N)
+            String q1 = "select distinct t from Team t join fetch t.members";
+            List<Team> result1 = em.createQuery(q1, Team.class).getResultList();
+
+            for(Team t : result1) {
+                System.out.println("t = "+t.getName() +" || m ="+t.getMembers().size());
+                /*
+                    t = 팀A || m =2  => JPA 한번더 중복 엔티티를 제거해줌
+                    t = 팀B || m =1
+
+                    제대로
+                 * */
+            }
+
 
             et.commit();
 
