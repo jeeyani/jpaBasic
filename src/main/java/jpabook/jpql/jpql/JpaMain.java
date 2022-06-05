@@ -306,32 +306,132 @@ public class JpaMain {
 
 
             //컬렉션 페치 조인
-            String q2 = "select t from Team t join fetch t.members";
+            // *** 페치조인 특징과 한계 ***
+            // - 페치조인 대상에는 별칭을 줄 수 없음
+            // ---- 페치조인 자체가 한방쿼리이기 때문에 따로 별칭을 사용하여 일부 원하는 데이터를 가져올 수 없다.
+            // ---- 하이버네이트는 가능하지만, 가급적 사용하지 않는 것을 권고한다.
+
+            // - 둘 이상의 컬렉션은 페치 조인을 할 수 없음
+            /*List<Team> aa = em.createQuery("select t from Team t", Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(2)
+                    .getResultList();*/
+                /*
+                *
+                * @BatchSize(size = 100) 배치 사이즈 사용
+                * -> List에 담긴 team객체를 한번에 설정해둔 사이즈 만큼 가져옴
+                * -> 해당 어노테이션을 통해 페치조인을 사용하지 않을때 N+1 쿼리가 생성되는 상황을 방지
+                *
+                * persistence.xml에서도 설정 가능
+                *
+                *
+                * */
+
+
+            // - 컬렉션을 페치조인하면 페이징API를 사용할 수 없다.
+
+           /* String q2 = "select t from Team t join fetch t.members";
             List<Team> result2 = em.createQuery(q2, Team.class).getResultList();
 
             for(Team t : result2) {
                 System.out.println("t = "+t.getName() +" || m ="+t.getMembers().size());
-                /*
+                *//*
                 * t = 팀A || m =2
                 * t = 팀A || m =2  ==> 중복 출력!!
                 * t = 팀B || m =1
-                * */
-            }
+                * *//*
+            }*/
 
             //distinct로 증복 없애기 (1 : N)
-            String q1 = "select distinct t from Team t join fetch t.members";
+
+            /*String q1 = "select distinct t from Team t join fetch t.members";
             List<Team> result1 = em.createQuery(q1, Team.class).getResultList();
 
             for(Team t : result1) {
                 System.out.println("t = "+t.getName() +" || m ="+t.getMembers().size());
-                /*
+                *//*
                     t = 팀A || m =2  => JPA 한번더 중복 엔티티를 제거해줌
                     t = 팀B || m =1
 
                     제대로
-                 * */
-            }
+                 * *//*
+            }*/
 
+
+            // ============== 엔티티 직접 사용하기 ==================
+
+
+            //1. 기본 키 값
+            // 엔티티를 직접 사용하게 되면 JPA는 구분자를 PK로 알아서 구분하여 조회
+           /* String q = "select m from Member m where m = :member";
+            String q2 = "select m from Member m where m.id = :memberId"; //q와 동일한 쿼리 실행
+            Member result1 = em.createQuery(q, Member.class)
+                    .setParameter("member",member1)
+                    .getSingleResult();
+
+            System.out.println("m = "+result1);*/
+            /*
+            select
+            member0_.id as id1_0_,
+                    member0_.age as age2_0_,
+            member0_.TEAM_ID as TEAM_ID5_0_,
+                    member0_.type as type3_0_,
+            member0_.username as username4_0_
+                    from
+            Member member0_
+            where
+            member0_.id=?
+             */
+
+
+            //2. 외래 키 값
+            //teamId 가 PK 값으로, 구분되어 쿼리 실행
+            /*String q3 = "select m from Member m where m.team = :team"; //q와 동일한 쿼리 실행
+            List<Member> result3 = em.createQuery(q3, Member.class)
+                    .setParameter("team",teamA)
+                    .getResultList();
+
+            for(Member m : result3){
+                System.out.println("m = "+m);
+            }*/
+
+
+            // ============== Named 쿼리 ==================
+            // 쿼리에 이름을 부여할 수 있음
+            // - 정적쿼리
+            // - 애플리케이션 로딩 시점에 초기화 후 재사용
+            // ---- sql로 파싱되어 실행
+            // - 애플리케이션 로딩 시점에 쿼리를 검증할 수 있음
+/*
+
+            List<Member> result = em.createNamedQuery("Member.findByUsername",Member.class)
+                    .setParameter("username","회원1")
+                    .getResultList();
+
+            for(Member m : result){
+                System.out.println("m = "+m);
+            }
+*/
+
+
+            // ============== 벌크연산 ==================
+            //sql에 update문 delete문
+            //쿼리 한 번으로 여러 테이블 로우 변경(엔티티)
+
+            //flush 자동 호출
+            int resCnt = em.createQuery("update Member m set m.age = 20") //디비에만 반영했기 때문에, 영속성 컨텍스트를 무시
+                            .executeUpdate();
+
+            em.clear(); // 벌크 연산 수행 후 영속성 컨텍스트 초기화
+
+            System.out.println("resCnt = "+resCnt);
+
+            // --< 주의 > --
+            //1. 벌크연상은 영속성 컨텍스트를 무시하고 데이터베이스에 직접 쿼리한다.
+            // --- 벌크 연산을 먼저 실행
+            // --- 벌크 연산 수행 후 영속성 컨텍스트 초기화
+
+            //spring에서는 @Modifying 사용용
 
             et.commit();
 

@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+//spring에서 사용할때는 해당 방법이 아닌
+//interface에서 @Query 언급하여 사용하자
+@NamedQuery(
+        name = "Member.findByUsername",
+        query = "select m from Member m where m.username = :username"
+)
 public class Member {
 
     @Id
